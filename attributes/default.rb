@@ -28,6 +28,8 @@ default['openstack']['dashboard']['custom_template_banner'] = '
 
 default['openstack']['dashboard']['debug'] = false
 
+default['openstack']['dashboard']['horizon_user'] = 'horizon'
+
 # This user's password is stored in an encrypted databag
 # and accessed with openstack-common cookbook library's
 # get_password routine.
@@ -43,6 +45,10 @@ default['openstack']['dashboard']['server_hostname'] = nil
 default['openstack']['dashboard']['use_ssl'] = true
 default['openstack']['dashboard']['ssl']['cert'] = 'horizon.pem'
 default['openstack']['dashboard']['ssl']['key'] = 'horizon.key'
+
+# List of hosts/domains the dashboard can serve. This should be changed, a '*'
+# allows everything
+default['openstack']['dashboard']['allowed_hosts'] = ['*']
 
 default['openstack']['dashboard']['swift']['enabled'] = 'False'
 

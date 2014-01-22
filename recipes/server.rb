@@ -105,6 +105,7 @@ execute 'openstack-dashboard syncdb' do
   environment 'PYTHONPATH' => '/etc/openstack-dashboard:/usr/share/openstack-dashboard:$PYTHONPATH'
   command 'python manage.py syncdb --noinput'
   action :run
+  user node['openstack']['dashboard']['horizon_user']
   # not_if "/usr/bin/mysql -u root -e 'describe #{node["dash"]["db"]}.django_content_type'"
 end
 

@@ -120,7 +120,8 @@ describe 'openstack-dashboard::server' do
           'PYTHONPATH' => '/etc/openstack-dashboard:' \
                           '/usr/share/openstack-dashboard:' \
                           '$PYTHONPATH'
-        }
+        },
+        user: @chef_run.node['openstack']['dashboard']['horizon_user']
       )
     end
 
