@@ -110,6 +110,10 @@ describe 'openstack-dashboard::server' do
         expect(@chef_run).to render_file(@file.name).with_content('CSRF_COOKIE_SECURE = True')
         expect(@chef_run).to render_file(@file.name).with_content('SESSION_COOKIE_SECURE = True')
       end
+
+      it 'sets the allowed hosts' do
+        expect(@chef_run).to render_file(@file.name).with_content('ALLOWED_HOSTS = ["*"]')
+      end
     end
 
     it 'executes openstack-dashboard syncdb' do
@@ -233,6 +237,10 @@ describe 'openstack-dashboard::server' do
       it 'notifies restore-selinux-context' do
         expect(@file).to notify('execute[restore-selinux-context]').to(:run)
       end
+
+      it 'sets the WSGI daemon user' do
+        expect(@chef_run).to render_file(@file.name).with_content("WSGIDaemonProcess dashboard user=#{@chef_run.node['openstack']['dashboard']['horizon_user']}")
+      end
     end
 
     it 'does not delete openstack-dashboard.conf' do
@@ -293,9 +301,9 @@ describe 'openstack-dashboard::server' do
     end
 
     it 'has group write mode on file' do
-      file = @chef_run.file("#{@chef_run.node['openstack']['dashboard']['dash_path']}/local/.secret_key_store")
-      expect(file.owner).to eq(@chef_run.node['apache']['user'])
-      expect(file.group).to eq(@chef_run.node['apache']['group'])
+      file = @chef_run.file(@chef_run.node['openstack']['dashboard']['secret_key_path'])
+      expect(file.owner).to eq(@chef_run.node['openstack']['dashboard']['horizon_user'])
+      expect(file.group).to eq(@chef_run.node['openstack']['dashboard']['horizon_group'])
     end
   end
 end
